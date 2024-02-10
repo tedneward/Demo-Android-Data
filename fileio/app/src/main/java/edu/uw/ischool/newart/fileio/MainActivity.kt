@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import java.io.FileNotFoundException
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
@@ -40,17 +41,18 @@ class MainActivity : AppCompatActivity() {
                 // this == FileInputStream
 
                 // a java.util.Properties gives us "x=y" syntax out of the box
-                val props = java.util.Properties()
-                props.load(this)
+                //val props = java.util.Properties()
+                //props.load(this)
 
-                edtServername.setText(props["servername"] as String)
-                val portnumber = props.getProperty("portnumber").toInt()
-                edtPort.setText(portnumber.toString())
+                //edtServername.setText(props["servername"] as String)
+                //val portnumber = props.getProperty("portnumber").toInt()
+                //edtPort.setText(portnumber)
 
                 // Otherwise we have to read and write the syntax ourselves
-                /*
+                ///*
                 val reader = this.reader()
                 reader.forEachLine {
+                    Log.i("MainActivity", "Examining line: " + it)
                     if (it.startsWith("servername")) {
                         val value = it.split("=")
                         edtServername.setText(value[1])
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                         Log.w("MainActivity", "Unrecognized line: " + it)
                     }
                 }
-                 */
+                // */
 
                 close()
             }
@@ -75,39 +77,39 @@ class MainActivity : AppCompatActivity() {
     }
     fun store() {
         try {
-            openFileOutput("AppData.properties", MODE_PRIVATE).apply {
+            openFileOutput("AppData.properties", MODE_PRIVATE).writer().apply {
                 // this == FileOutputStream
 
                 // a java.util.Properties gives us "x=y" syntax out of the box
-                val props = java.util.Properties()
-                props["servername"] = edtServername.text.toString()
-                props["port"] = edtPort.text.toString()
-                props.store(this, "No comments")
+                //val props = java.util.Properties()
+                //props["servername"] = edtServername.text.toString()
+                //props["portnumber"] = edtPort.text.toString()
+                //props.store(this, "No comments")
 
                 // Otherwise we have to read and write the syntax ourselves
-                /*
-                val reader = this.reader()
-                reader.forEachLine {
-                    if (it.startsWith("servername")) {
-                        val value = it.split("=")
-                        edtServername.setText(value[1])
-                    }
-                    else if (it.startsWith("portnumber")) {
-                        val value = it.split("=")
-                        edtPort.setText(value[1])
-                    }
-                    else {
-                        Log.w("MainActivity", "Unrecognized line: " + it)
-                    }
-                }
-                 */
+                // /*
+                write("servername=" + edtServername.text + "\n")
+                write("portnumber=" + edtPort.text + "\n")
+
+                // */
 
                 close()
             }
-
+        }
+        catch (secEx : SecurityException) {
+            Log.e("MainActivity", "Security Exception: ", secEx)
+        }
+        catch (fnfEx : FileNotFoundException) {
+            Log.e("MainActivity", "File not found exception?", fnfEx)
         }
         catch (ioEx : IOException) {
             Log.e("MainActivity", "Error storing AppData", ioEx)
+        }
+        catch (t : Throwable) {
+            Log.e("MainActivity", "Throwable: ", t)
+        }
+        finally {
+            Log.e("MainActivity", "Exiting openFileOutput()")
         }
     }
     fun delete() {
