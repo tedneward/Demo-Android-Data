@@ -8,7 +8,7 @@ Using the Android SharedPreferences mechanic to store data in what are essential
 Open and close a file stream on Android. We use a `java.util.Properties` instance to give the file some simple structure and formatting, as is common with a lot of Java projects.
 
 ## Simple File JSON (`filejson`)
-Same as `fileio`, except we use JSON storage.
+Same as `fileio`, except we use JSON storage for the data being stored. This is to show off how we combine local file storage and the use of the JSON classes Android provides.
 
 ## Serialized-Object Files (`serial`)
 Java's Object Serialization Specification, while deeply maligned by many in the Java community, makes for a simple-yet-powerful way to store/load complex object graphs or collections to disk.
