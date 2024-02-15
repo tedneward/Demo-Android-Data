@@ -13,6 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "sharedprefs"
+rootProject.name = "Sqlite"
 include(":app")
- 
